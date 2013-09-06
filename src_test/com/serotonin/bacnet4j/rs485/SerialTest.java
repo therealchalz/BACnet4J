@@ -9,11 +9,11 @@ import com.serotonin.bacnet4j.event.DeviceEventAdapter;
 import com.serotonin.bacnet4j.exception.BACnetException;
 import com.serotonin.bacnet4j.npdu.mstp.MasterNode;
 import com.serotonin.bacnet4j.npdu.mstp.MstpNetwork;
+import com.serotonin.bacnet4j.npdu.mstp.SerialParameters;
 import com.serotonin.bacnet4j.service.unconfirmed.WhoIsRequest;
 import com.serotonin.bacnet4j.transport.Transport;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.util.RequestUtils;
-import com.serotonin.io.serial.SerialParameters;
 
 /**
  * This class tests the MS/TP code using an RS-485 network accessed via COM4.
@@ -29,8 +29,7 @@ public class SerialTest {
 
         SerialParameters params = new SerialParameters();
         params.setCommPortId("COM4");
-        params.setBaudRate(9600);
-        params.setPortOwnerName("Testing");
+        params.setBaudrate(9600);
 
         MasterNode master = new MasterNode(params, (byte) 0x4, 2);
         MstpNetwork network = new MstpNetwork(master);

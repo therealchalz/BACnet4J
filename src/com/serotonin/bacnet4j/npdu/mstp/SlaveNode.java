@@ -5,8 +5,6 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.serotonin.io.serial.SerialParameters;
-
 public class SlaveNode extends MstpNode {
     private static final Logger LOG = Logger.getLogger(SlaveNode.class.toString());
 

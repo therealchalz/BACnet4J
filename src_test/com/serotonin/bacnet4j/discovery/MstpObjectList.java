@@ -9,6 +9,7 @@ import com.serotonin.bacnet4j.exception.BACnetException;
 import com.serotonin.bacnet4j.npdu.mstp.MasterNode;
 import com.serotonin.bacnet4j.npdu.mstp.MstpNetwork;
 import com.serotonin.bacnet4j.npdu.mstp.MstpNode;
+import com.serotonin.bacnet4j.npdu.mstp.SerialParameters;
 import com.serotonin.bacnet4j.service.unconfirmed.WhoIsRequest;
 import com.serotonin.bacnet4j.transport.Transport;
 import com.serotonin.bacnet4j.type.Encodable;
@@ -20,7 +21,6 @@ import com.serotonin.bacnet4j.type.primitive.UnsignedInteger;
 import com.serotonin.bacnet4j.util.PropertyReferences;
 import com.serotonin.bacnet4j.util.RequestListener;
 import com.serotonin.bacnet4j.util.RequestUtils;
-import com.serotonin.io.serial.SerialParameters;
 import com.serotonin.log.SimpleLog;
 
 public class MstpObjectList {
@@ -32,7 +32,7 @@ public class MstpObjectList {
         MstpNode.DEBUG = true;
         SerialParameters serialParams = new SerialParameters();
         serialParams.setCommPortId("COM4");
-        serialParams.setBaudRate(38400);
+        serialParams.setBaudrate(38400);
         MasterNode node = new MasterNode(serialParams, (byte) 0, 2);
         MstpNetwork network = new MstpNetwork(node);
         Transport transport = new Transport(network);

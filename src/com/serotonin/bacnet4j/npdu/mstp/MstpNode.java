@@ -1,20 +1,21 @@
 package com.serotonin.bacnet4j.npdu.mstp;
 
-import gnu.io.SerialPort;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jssc.SerialPort;
+import jssc.SerialPortException;
+import jssc.SerialInputStream;
+import jssc.SerialOutputStream;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.serotonin.bacnet4j.util.ClockTimeSource;
 import com.serotonin.bacnet4j.util.TimeSource;
 import com.serotonin.io.StreamUtils;
-import com.serotonin.io.serial.SerialParameters;
-import com.serotonin.io.serial.SerialUtils;
 import com.serotonin.util.queue.ByteQueue;
 
 abstract public class MstpNode implements Runnable {
@@ -90,9 +91,12 @@ abstract public class MstpNode implements Runnable {
     public void initialize(boolean runInThread) throws Exception {
         if (!running) {
             if (serialParams != null) {
-                serialPort = SerialUtils.openSerialPort(serialParams);
-                in = serialPort.getInputStream();
-                out = serialPort.getOutputStream();
+                serialPort = new SerialPort(serialParams.getCommPortId());
+                serialPort.setParams(serialParams.getBaudrate(), serialParams.getDatabits(),
+                            serialParams.getStopbits(), serialParams.getParity());
+                serialPort.setFlowControlMode(serialParams.getFlowcontrol());
+                in = new SerialInputStream(serialPort);
+                out = new SerialOutputStream(serialPort);
             }
 
             start = timeSource.currentTimeMillis();
@@ -218,8 +222,14 @@ abstract public class MstpNode implements Runnable {
             }
         }
 
-        if (serialPort != null)
-            SerialUtils.close(serialPort);
+        if (serialPort != null) {
+            try {
+                serialPort.closePort();
+            } catch (SerialPortException e) {
+                // no op
+            }
+        }
+            
     }
 
     abstract protected void doCycle();
